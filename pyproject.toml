@@ -1,0 +1,155 @@
+[build-system]
+requires = ["hatchling>=1.18"]
+build-backend = "hatchling.build"
+
+# ---------------------------------------------------------------------------
+# Project metadata
+# ---------------------------------------------------------------------------
+
+[project]
+name = "llm-output-guard"
+dynamic = ["version"]
+description = "Validate LLM outputs against schemas with automatic retry and JSON extraction."
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.9"
+authors = [{ name = "Ujjwal Prakash Bajpayee", email = "ujjwalprakash02@gmail.com" }]
+keywords = [
+  "llm", "validation", "pydantic", "json-schema", "structured-output",
+  "openai", "langchain", "guardrails",
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+  "Typing :: Typed",
+]
+
+# ---------------------------------------------------------------------------
+# Runtime dependencies (all optional extras)
+# ---------------------------------------------------------------------------
+
+dependencies = []          # zero hard dependencies for the core
+
+[project.optional-dependencies]
+pydantic = ["pydantic>=2.0"]
+pydantic-v1 = ["pydantic>=1.10,<2.0"]
+jsonschema = ["jsonschema>=4.0"]
+openai = ["openai>=1.0"]
+langchain = ["langchain-core>=0.1"]
+fastapi = ["fastapi>=0.100", "httpx>=0.24"]
+cli = ["click>=8.0"]
+all = [
+  "pydantic>=2.0",
+  "jsonschema>=4.0",
+  "openai>=1.0",
+  "langchain-core>=0.1",
+  "fastapi>=0.100",
+  "httpx>=0.24",
+  "click>=8.0",
+]
+dev = [
+  "pytest>=7.4",
+  "pytest-cov>=4.1",
+  "pytest-asyncio>=0.23",
+  "pydantic>=2.0",
+  "jsonschema>=4.0",
+  "click>=8.0",
+  "ruff>=0.2",
+  "mypy>=1.8",
+  "pre-commit>=3.6",
+]
+docs = [
+  "mkdocs>=1.5",
+  "mkdocs-material>=9.5",
+  "mkdocstrings[python]>=0.24",
+]
+
+[project.scripts]
+llm-guard = "llm_output_guard.cli.main:main"
+
+[project.urls]
+Homepage = "https://github.com/Ujjwal-Bajpayee/llm-output-guard"
+Documentation = "https://Ujjwal-Bajpayee.github.io/llm-output-guard"
+Repository = "https://github.com/Ujjwal-Bajpayee/llm-output-guard"
+"Bug Tracker" = "https://github.com/Ujjwal-Bajpayee/llm-output-guard/issues"
+Changelog = "https://github.com/Ujjwal-Bajpayee/llm-output-guard/blob/main/CHANGELOG.md"
+
+# ---------------------------------------------------------------------------
+# Hatch build
+# ---------------------------------------------------------------------------
+
+[tool.hatch.version]
+path = "src/llm_output_guard/__version__.py"
+pattern = '__version__ = "(?P<version>[^"]+)"'
+
+[tool.hatch.build.targets.sdist]
+include = ["/src", "/tests", "README.md", "LICENSE", "CHANGELOG.md"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/llm_output_guard"]
+artifacts = ["src/llm_output_guard/py.typed"]
+
+# ---------------------------------------------------------------------------
+# Pytest
+# ---------------------------------------------------------------------------
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v --tb=short --strict-markers"
+markers = [
+  "integration: marks tests that call external services",
+  "slow: marks tests that are comparatively slow",
+]
+
+# ---------------------------------------------------------------------------
+# Coverage
+# ---------------------------------------------------------------------------
+
+[tool.coverage.run]
+source = ["src/llm_output_guard"]
+branch = true
+
+[tool.coverage.report]
+exclude_lines = [
+  "pragma: no cover",
+  "if TYPE_CHECKING:",
+  "raise NotImplementedError",
+  "if __name__ == .__main__.:",
+]
+show_missing = true
+fail_under = 80
+
+# ---------------------------------------------------------------------------
+# Ruff (linter + formatter)
+# ---------------------------------------------------------------------------
+
+[tool.ruff]
+line-length = 100
+target-version = "py39"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "C4", "SIM", "TCH"]
+ignore = ["B008", "E501"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S101"]   # allow assert in tests
+
+# ---------------------------------------------------------------------------
+# Mypy
+# ---------------------------------------------------------------------------
+
+[tool.mypy]
+python_version = "3.9"
+strict = true
+warn_unreachable = true
+ignore_missing_imports = true
+exclude = ["examples/", "scripts/"]

@@ -1,0 +1,20 @@
+{
+  "valid_person": {"name": "Alice", "age": 30},
+  "invalid_person_missing_age": {"name": "Bob"},
+  "invalid_person_wrong_type": {"name": "Charlie", "age": "thirty"},
+  "valid_article": {
+    "title": "Introduction to LLMs",
+    "content": "Large language models are...",
+    "tags": ["AI", "NLP", "ML"]
+  },
+  "invalid_article_missing_content": {
+    "title": "Introduction to LLMs"
+  },
+  "nested_object": {
+    "user": {"id": 1, "name": "Alice"},
+    "items": [{"id": 10, "qty": 2}, {"id": 11, "qty": 1}]
+  },
+  "markdown_wrapped": "```json\n{\"name\": \"Alice\", \"age\": 30}\n```",
+  "prose_wrapped": "Based on the information, here is the data: {\"name\": \"Alice\", \"age\": 30} — that's all.",
+  "single_quoted": "{'name': 'Alice', 'age': 30}"
+}

@@ -1,0 +1,71 @@
+site_name: llm-output-guard
+site_description: Validate LLM outputs against schemas with automatic retry and JSON extraction.
+site_url: https://Ujjwal-Bajpayee.github.io/llm-output-guard
+repo_url: https://github.com/Ujjwal-Bajpayee/llm-output-guard
+repo_name: Ujjwal-Bajpayee/llm-output-guard
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.code.annotate
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [src]
+          options:
+            show_source: true
+            show_root_heading: true
+            docstring_style: google
+
+nav:
+  - Home: index.md
+  - Getting Started: getting-started.md
+  - API Reference: api-reference.md
+  - Examples:
+      - Basic Usage: examples/basic_usage.md
+      - Pydantic Integration: examples/pydantic_integration.md
+      - LangChain Integration: examples/langchain_integration.md
+      - FastAPI Integration: examples/fastapi_integration.md
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - admonition
+  - pymdownx.details
+  - tables
+  - toc:
+      permalink: true
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/Ujjwal-Bajpayee/llm-output-guard
+    - icon: fontawesome/brands/python
+      link: https://pypi.org/project/llm-output-guard/
