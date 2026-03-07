@@ -29,7 +29,7 @@ theme:
     - search.highlight
     - content.code.copy
     - content.code.annotate
-
+    
 plugins:
   - search
   - mkdocstrings:

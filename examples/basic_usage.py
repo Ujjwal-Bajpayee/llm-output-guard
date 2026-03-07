@@ -42,3 +42,5 @@ else:
 raw = '{"name": "Bob", "age": 25}'
 result2 = Validator(schema=person_schema).validate_output(raw)
 print("Direct validation:", result2.success)
+
+

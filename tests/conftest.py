@@ -120,3 +120,5 @@ def failing_llm():
     mock = MagicMock()
     mock.return_value = "Sorry, I cannot answer that."
     return mock
+
+

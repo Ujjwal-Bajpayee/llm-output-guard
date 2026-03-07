@@ -90,3 +90,5 @@ class LLMGuardMiddleware:
 
     async def __call__(self, scope: Any, receive: Any, send: Any) -> None:
         await self.app(scope, receive, send)
+
+

@@ -49,3 +49,5 @@ print(result.data)  # Person(name='Alice', age=30)
     - [Pydantic Integration](examples/pydantic_integration.md)
     - [LangChain Integration](examples/langchain_integration.md)
     - [FastAPI Integration](examples/fastapi_integration.md)
+
+

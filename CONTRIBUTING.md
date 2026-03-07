@@ -124,3 +124,4 @@ Releases are managed by maintainers:
 1. Update `__version__.py` and `CHANGELOG.md`.
 2. Create and push a version tag: `git tag v0.x.y && git push origin v0.x.y`.
 3. The `publish.yml` workflow publishes to PyPI automatically.
+
