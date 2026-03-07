@@ -1,6 +1,6 @@
 # llm-output-guard
 
-[![PyPI version](https://badge.fury.io/py/llm-output-guard.svg)](https://pypi.org/project/llm-output-guard/)
+[![PyPI version](https://badge.fury.io/py/llm-output-guard.svg)](https://pypi.org/project/llm-output-guard/0.1.0/)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Tests](https://github.com/Ujjwal-Bajpayee/llm-output-guard/actions/workflows/tests.yml/badge.svg)](https://github.com/Ujjwal-Bajpayee/llm-output-guard/actions/workflows/tests.yml)
