@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 import re
-from typing import Any, Optional
+from typing import Any
 
 from ..core.exceptions import JSONParseError
 
@@ -46,9 +46,7 @@ def extract_json(text: str) -> Any:
         pass
 
     # 2. Extract from markdown code fence.
-    fence_match = re.search(
-        r"```(?:json)?\s*\n?([\s\S]*?)\n?```", stripped, re.IGNORECASE
-    )
+    fence_match = re.search(r"```(?:json)?\s*\n?([\s\S]*?)\n?```", stripped, re.IGNORECASE)
     if fence_match:
         candidate = fence_match.group(1).strip()
         try:

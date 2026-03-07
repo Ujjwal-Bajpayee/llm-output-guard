@@ -2,10 +2,8 @@
 
 from __future__ import annotations
 
-import math
 import random
 import time
-from typing import Optional
 
 
 class BaseRetryStrategy:
@@ -45,7 +43,7 @@ class ExponentialBackoffStrategy(BaseRetryStrategy):
         self.jitter = jitter
 
     def get_delay(self, attempt: int) -> float:
-        delay = min(self.base_delay * (2 ** (attempt - 1)), self.max_delay)
+        delay: float = min(self.base_delay * (2 ** (attempt - 1)), self.max_delay)
         if self.jitter:
             delay = random.uniform(0, delay)
         return delay
@@ -77,7 +75,5 @@ def get_strategy(
         "linear": LinearBackoffStrategy(base_delay=base_delay, max_delay=max_delay),
     }
     if name not in strategies:
-        raise ValueError(
-            f"Unknown retry strategy {name!r}. Choose from: {list(strategies)}"
-        )
+        raise ValueError(f"Unknown retry strategy {name!r}. Choose from: {list(strategies)}")
     return strategies[name]

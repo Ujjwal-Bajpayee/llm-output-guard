@@ -2,21 +2,22 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, List, Optional, Type
+from typing import TYPE_CHECKING, Any
 
 from ..core.exceptions import IntegrationError
-from ..core.types import SchemaDefinition
 from ..core.validator import GuardResult, Validator
 
+if TYPE_CHECKING:
+    from ..core.types import SchemaDefinition
+
 try:
-    from langchain_core.language_models import BaseLanguageModel
-    from langchain_core.messages import HumanMessage
-    from langchain_core.output_parsers import BaseOutputParser
+    import langchain_core  # noqa: F401
+
     LANGCHAIN_AVAILABLE = True
 except ImportError:
     try:
-        from langchain.schema import BaseLanguageModel, HumanMessage
-        from langchain.schema import BaseOutputParser
+        import langchain  # noqa: F401
+
         LANGCHAIN_AVAILABLE = True
     except ImportError:
         LANGCHAIN_AVAILABLE = False
@@ -69,7 +70,7 @@ class GuardedLLM:
         try:
             response = self._llm.invoke(prompt, **kwargs)
             if hasattr(response, "content"):
-                return response.content
+                return str(response.content)
             return str(response)
         except Exception as exc:
             raise IntegrationError(
@@ -95,8 +96,10 @@ class GuardOutputParser:
     def __init__(self, schema: SchemaDefinition) -> None:
         _check_langchain()
         from ..core.schema_parser import SchemaParser
+
         self._parser = SchemaParser(schema)
         from ..utils.json_helpers import extract_json
+
         self._extract_json = extract_json
 
     def parse(self, text: str) -> Any:
@@ -104,6 +107,7 @@ class GuardOutputParser:
         result, errors = self._parser.validate(data)
         if errors:
             from ..core.exceptions import ValidationError
+
             raise ValidationError(
                 "Output does not match schema.",
                 errors=errors,
@@ -112,7 +116,4 @@ class GuardOutputParser:
         return result
 
     def get_format_instructions(self) -> str:
-        return (
-            "Return a JSON object matching this schema:\n"
-            + self._parser.describe()
-        )
+        return "Return a JSON object matching this schema:\n" + self._parser.describe()

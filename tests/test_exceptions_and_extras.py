@@ -5,18 +5,18 @@ from __future__ import annotations
 import pytest
 
 from llm_output_guard.core.exceptions import (
+    IntegrationError,
     JSONParseError,
     LLMOutputGuardError,
     MaxRetriesExceededError,
     SchemaParseError,
     ValidationError,
-    IntegrationError,
 )
-
 
 # ---------------------------------------------------------------------------
 # Exception classes
 # ---------------------------------------------------------------------------
+
 
 class TestExceptions:
     def test_base_error_message(self):
@@ -77,9 +77,11 @@ class TestExceptions:
 # LangChain GuardOutputParser (no real LLM needed)
 # ---------------------------------------------------------------------------
 
+
 class TestGuardOutputParserUnit:
     def test_parse_valid(self):
-        from llm_output_guard.integrations.langchain import GuardOutputParser, LANGCHAIN_AVAILABLE
+        from llm_output_guard.integrations.langchain import LANGCHAIN_AVAILABLE, GuardOutputParser
+
         if not LANGCHAIN_AVAILABLE:
             pytest.skip("LangChain not installed")
         schema = {
@@ -92,10 +94,12 @@ class TestGuardOutputParserUnit:
         assert result == {"name": "Alice"}
 
     def test_parse_invalid_raises(self):
-        from llm_output_guard.integrations.langchain import GuardOutputParser, LANGCHAIN_AVAILABLE
+        from llm_output_guard.integrations.langchain import LANGCHAIN_AVAILABLE, GuardOutputParser
+
         if not LANGCHAIN_AVAILABLE:
             pytest.skip("LangChain not installed")
         from llm_output_guard.core.exceptions import ValidationError
+
         schema = {
             "type": "object",
             "properties": {"name": {"type": "string"}},
@@ -106,7 +110,8 @@ class TestGuardOutputParserUnit:
             parser.parse('{"age": 30}')
 
     def test_get_format_instructions(self):
-        from llm_output_guard.integrations.langchain import GuardOutputParser, LANGCHAIN_AVAILABLE
+        from llm_output_guard.integrations.langchain import LANGCHAIN_AVAILABLE, GuardOutputParser
+
         if not LANGCHAIN_AVAILABLE:
             pytest.skip("LangChain not installed")
         schema = {"type": "object", "properties": {"name": {"type": "string"}}}
@@ -120,9 +125,11 @@ class TestGuardOutputParserUnit:
 # FastAPI guarded_endpoint (smoke test; no HTTP call needed)
 # ---------------------------------------------------------------------------
 
+
 class TestFastAPIIntegration:
     def test_import_without_fastapi(self):
         import llm_output_guard.integrations.fastapi as fa_mod
+
         original = fa_mod.FASTAPI_AVAILABLE
         fa_mod.FASTAPI_AVAILABLE = False
         try:
@@ -134,6 +141,7 @@ class TestFastAPIIntegration:
     def test_guarded_endpoint_decorator_is_callable(self):
         """guarded_endpoint returns a decorator without raising."""
         from llm_output_guard.integrations.fastapi import FASTAPI_AVAILABLE, guarded_endpoint
+
         if not FASTAPI_AVAILABLE:
             pytest.skip("FastAPI not installed")
 
@@ -150,7 +158,6 @@ class TestFastAPIIntegration:
         assert callable(decorator)
 
         # Apply the decorator to a plain async function and verify it wraps correctly
-        import asyncio
 
         async def route_fn():
             return '{"result": "ok"}'
@@ -160,10 +167,12 @@ class TestFastAPIIntegration:
         assert wrapped.__name__ == "route_fn"
 
     def test_llm_guard_middleware_init(self):
-        from llm_output_guard.integrations.fastapi import LLMGuardMiddleware, FASTAPI_AVAILABLE
+        from llm_output_guard.integrations.fastapi import FASTAPI_AVAILABLE, LLMGuardMiddleware
+
         if not FASTAPI_AVAILABLE:
             pytest.skip("FastAPI not installed")
         from fastapi import FastAPI
+
         app = FastAPI()
         schema = {"type": "object", "properties": {"x": {"type": "string"}}}
         mw = LLMGuardMiddleware(app=app, schema=schema)
@@ -174,12 +183,15 @@ class TestFastAPIIntegration:
 # OpenAI guard — validate_output path (no API call)
 # ---------------------------------------------------------------------------
 
+
 class TestGuardedOpenAIUnit:
     def test_validate_output_success(self):
-        from llm_output_guard.integrations.openai import GuardedOpenAI, OPENAI_AVAILABLE
+        from llm_output_guard.integrations.openai import OPENAI_AVAILABLE, GuardedOpenAI
+
         if not OPENAI_AVAILABLE:
             pytest.skip("OpenAI SDK not installed")
         from unittest.mock import patch
+
         schema = {
             "type": "object",
             "properties": {"title": {"type": "string"}},
@@ -192,10 +204,12 @@ class TestGuardedOpenAIUnit:
         assert result.data["title"] == "Hello"
 
     def test_validate_output_failure(self):
-        from llm_output_guard.integrations.openai import GuardedOpenAI, OPENAI_AVAILABLE
+        from llm_output_guard.integrations.openai import OPENAI_AVAILABLE, GuardedOpenAI
+
         if not OPENAI_AVAILABLE:
             pytest.skip("OpenAI SDK not installed")
         from unittest.mock import patch
+
         schema = {
             "type": "object",
             "properties": {"title": {"type": "string"}},

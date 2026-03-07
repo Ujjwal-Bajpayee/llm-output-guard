@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import logging
-from typing import Callable, Optional, Tuple, Type
 
 from .strategies import BaseRetryStrategy, get_strategy
 

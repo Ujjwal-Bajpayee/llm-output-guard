@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict
+from typing import Any
 
 import pytest
 
@@ -10,8 +10,7 @@ from llm_output_guard.core.exceptions import SchemaParseError
 from llm_output_guard.core.schema_parser import SchemaParser, detect_schema_type
 from llm_output_guard.core.types import SchemaType
 
-
-PERSON_JSON_SCHEMA: Dict[str, Any] = {
+PERSON_JSON_SCHEMA: dict[str, Any] = {
     "type": "object",
     "properties": {
         "name": {"type": "string"},

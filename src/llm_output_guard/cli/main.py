@@ -8,6 +8,7 @@ from pathlib import Path
 
 try:
     import click
+
     CLICK_AVAILABLE = True
 except ImportError:
     CLICK_AVAILABLE = False
@@ -42,9 +43,7 @@ if CLICK_AVAILABLE:
     @click.argument("schema_file", type=click.Path(exists=True))
     @click.option("--strict", is_flag=True, help="Strict JSON mode (no extraction).")
     @click.option("--quiet", "-q", is_flag=True, help="Suppress success messages.")
-    def validate_cmd(
-        output_file: str, schema_file: str, strict: bool, quiet: bool
-    ) -> None:
+    def validate_cmd(output_file: str, schema_file: str, strict: bool, quiet: bool) -> None:
         """Validate OUTPUT_FILE (JSON) against SCHEMA_FILE (JSON Schema)."""
         from llm_output_guard import Validator
 
@@ -91,9 +90,11 @@ if CLICK_AVAILABLE:
             sys.exit(1)
 
         from llm_output_guard.core.schema_parser import pydantic_schema_to_json
+
         schema = pydantic_schema_to_json(model_cls)
         click.echo(json.dumps(schema, indent=indent))
 
 else:
+
     def _cli() -> None:  # type: ignore[misc]
         _no_click()

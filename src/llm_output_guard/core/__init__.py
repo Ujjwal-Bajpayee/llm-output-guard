@@ -2,12 +2,12 @@
 #   from llm_output_guard.core import Validator, SchemaParser, ...
 
 from .exceptions import (
+    IntegrationError,
     JSONParseError,
     LLMOutputGuardError,
     MaxRetriesExceededError,
     SchemaParseError,
     ValidationError,
-    IntegrationError,
 )
 from .schema_parser import SchemaParser
 from .types import LLMCallable, ParsedOutput, RetryStrategy, SchemaDefinition, SchemaType

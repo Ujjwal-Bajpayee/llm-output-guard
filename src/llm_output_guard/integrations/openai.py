@@ -2,14 +2,17 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, List, Optional
+from typing import TYPE_CHECKING, Any
 
 from ..core.exceptions import IntegrationError
-from ..core.types import SchemaDefinition
 from ..core.validator import GuardResult, Validator
+
+if TYPE_CHECKING:
+    from ..core.types import SchemaDefinition
 
 try:
     from openai import OpenAI
+
     OPENAI_AVAILABLE = True
 except ImportError:
     OPENAI_AVAILABLE = False
@@ -46,14 +49,14 @@ class GuardedOpenAI:
         schema: SchemaDefinition,
         *,
         model: str = "gpt-4o-mini",
-        api_key: Optional[str] = None,
+        api_key: str | None = None,
         temperature: float = 0.0,
-        max_tokens: Optional[int] = None,
+        max_tokens: int | None = None,
         max_retries: int = 2,
         retry_strategy: str = "exponential",
         raise_on_failure: bool = False,
-        system_prompt: Optional[str] = None,
-        extra_openai_kwargs: Optional[Dict[str, Any]] = None,
+        system_prompt: str | None = None,
+        extra_openai_kwargs: dict[str, Any] | None = None,
     ) -> None:
         _check_openai()
         self.model = model
@@ -76,8 +79,8 @@ class GuardedOpenAI:
     # ------------------------------------------------------------------
 
     def _call_openai(self, prompt: str, **kwargs: Any) -> str:
-        messages: List[Dict[str, str]] = [{"role": "user", "content": prompt}]
-        call_kwargs: Dict[str, Any] = {
+        messages: list[dict[str, str]] = [{"role": "user", "content": prompt}]
+        call_kwargs: dict[str, Any] = {
             "model": self.model,
             "messages": messages,
             "temperature": self.temperature,

@@ -2,9 +2,7 @@
 
 from __future__ import annotations
 
-import json
-from typing import Any, Dict, List, Optional
-
+from typing import Any
 
 _DEFAULT_SYSTEM_PROMPT = (
     "You are a helpful assistant that always responds with valid JSON. "
@@ -36,8 +34,8 @@ Return ONLY valid JSON.
 def build_validation_prompt(
     prompt: str,
     schema_description: str,
-    system_prompt: Optional[str] = None,
-    previous_errors: Optional[List[Dict[str, Any]]] = None,
+    system_prompt: str | None = None,
+    previous_errors: list[dict[str, Any]] | None = None,
 ) -> str:
     """
     Construct the full prompt sent to the LLM.
@@ -61,7 +59,7 @@ def build_validation_prompt(
     return "\n\n".join(parts)
 
 
-def _format_errors_for_prompt(errors: List[Dict[str, Any]]) -> str:
+def _format_errors_for_prompt(errors: list[dict[str, Any]]) -> str:
     lines = []
     for err in errors:
         loc = " -> ".join(str(x) for x in err.get("loc", []))

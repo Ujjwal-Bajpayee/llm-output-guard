@@ -2,13 +2,14 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict
+from typing import Any
 from unittest.mock import MagicMock
 
 import pytest
 
 try:
     from pydantic import BaseModel
+
     PYDANTIC_AVAILABLE = True
 except ImportError:
     PYDANTIC_AVAILABLE = False
@@ -19,6 +20,7 @@ except ImportError:
 # ---------------------------------------------------------------------------
 
 if PYDANTIC_AVAILABLE:
+
     class PersonModel(BaseModel):
         name: str
         age: int
@@ -42,7 +44,7 @@ else:
 # JSON Schema fixtures
 # ---------------------------------------------------------------------------
 
-PERSON_JSON_SCHEMA: Dict[str, Any] = {
+PERSON_JSON_SCHEMA: dict[str, Any] = {
     "type": "object",
     "properties": {
         "name": {"type": "string"},
@@ -51,7 +53,7 @@ PERSON_JSON_SCHEMA: Dict[str, Any] = {
     "required": ["name", "age"],
 }
 
-ARTICLE_JSON_SCHEMA: Dict[str, Any] = {
+ARTICLE_JSON_SCHEMA: dict[str, Any] = {
     "type": "object",
     "properties": {
         "title": {"type": "string"},
@@ -66,7 +68,7 @@ ARTICLE_JSON_SCHEMA: Dict[str, Any] = {
 # Plain dict schema fixtures
 # ---------------------------------------------------------------------------
 
-PERSON_DICT_SCHEMA: Dict[str, Any] = {
+PERSON_DICT_SCHEMA: dict[str, Any] = {
     "name": str,
     "age": int,
 }
@@ -75,6 +77,7 @@ PERSON_DICT_SCHEMA: Dict[str, Any] = {
 # ---------------------------------------------------------------------------
 # Pytest fixtures
 # ---------------------------------------------------------------------------
+
 
 @pytest.fixture
 def person_pydantic_model():

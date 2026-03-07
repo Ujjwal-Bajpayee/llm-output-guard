@@ -2,15 +2,17 @@
 
 from __future__ import annotations
 
-from typing import Any, Callable, Optional, Type
+from typing import TYPE_CHECKING, Any, Callable
 
-from ..core.exceptions import IntegrationError, ValidationError
-from ..core.types import SchemaDefinition
-from ..core.validator import GuardResult, Validator
+from ..core.exceptions import IntegrationError
+from ..core.validator import Validator
+
+if TYPE_CHECKING:
+    from ..core.types import SchemaDefinition
 
 try:
     from fastapi import HTTPException
-    from fastapi.responses import JSONResponse
+
     FASTAPI_AVAILABLE = True
 except ImportError:
     FASTAPI_AVAILABLE = False
@@ -83,6 +85,7 @@ class LLMGuardMiddleware:
         _check_fastapi()
         self.app = app
         from ..core.schema_parser import SchemaParser
+
         self.schema_parser = SchemaParser(schema)
 
     async def __call__(self, scope: Any, receive: Any, send: Any) -> None:

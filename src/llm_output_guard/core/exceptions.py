@@ -2,13 +2,13 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 
 class LLMOutputGuardError(Exception):
     """Base exception for all llm-output-guard errors."""
 
-    def __init__(self, message: str, details: Optional[Dict[str, Any]] = None) -> None:
+    def __init__(self, message: str, details: dict[str, Any] | None = None) -> None:
         super().__init__(message)
         self.message = message
         self.details = details or {}
@@ -23,8 +23,8 @@ class ValidationError(LLMOutputGuardError):
     def __init__(
         self,
         message: str,
-        errors: Optional[List[Dict[str, Any]]] = None,
-        raw_output: Optional[str] = None,
+        errors: list[dict[str, Any]] | None = None,
+        raw_output: str | None = None,
         attempts: int = 0,
     ) -> None:
         super().__init__(message, details={"errors": errors or [], "raw_output": raw_output})
@@ -50,9 +50,7 @@ class ValidationError(LLMOutputGuardError):
 class SchemaParseError(LLMOutputGuardError):
     """Raised when the provided schema cannot be parsed."""
 
-    def __init__(
-        self, message: str, schema: Any = None, schema_type: Optional[str] = None
-    ) -> None:
+    def __init__(self, message: str, schema: Any = None, schema_type: str | None = None) -> None:
         super().__init__(message, details={"schema": str(schema), "schema_type": schema_type})
         self.schema = schema
         self.schema_type = schema_type
@@ -61,7 +59,7 @@ class SchemaParseError(LLMOutputGuardError):
 class JSONParseError(LLMOutputGuardError):
     """Raised when LLM output cannot be parsed as JSON."""
 
-    def __init__(self, message: str, raw_output: Optional[str] = None) -> None:
+    def __init__(self, message: str, raw_output: str | None = None) -> None:
         super().__init__(message, details={"raw_output": raw_output})
         self.raw_output = raw_output
 
@@ -73,11 +71,9 @@ class MaxRetriesExceededError(LLMOutputGuardError):
         self,
         message: str,
         attempts: int = 0,
-        last_error: Optional[Exception] = None,
+        last_error: Exception | None = None,
     ) -> None:
-        super().__init__(
-            message, details={"attempts": attempts, "last_error": str(last_error)}
-        )
+        super().__init__(message, details={"attempts": attempts, "last_error": str(last_error)})
         self.attempts = attempts
         self.last_error = last_error
 
@@ -86,7 +82,7 @@ class IntegrationError(LLMOutputGuardError):
     """Raised when an integration (LangChain, FastAPI, etc.) encounters an error."""
 
     def __init__(
-        self, message: str, integration: Optional[str] = None, cause: Optional[Exception] = None
+        self, message: str, integration: str | None = None, cause: Exception | None = None
     ) -> None:
         super().__init__(message, details={"integration": integration, "cause": str(cause)})
         self.integration = integration

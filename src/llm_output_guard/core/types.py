@@ -3,10 +3,11 @@
 from __future__ import annotations
 
 from enum import Enum
-from typing import Any, Callable, Dict, List, Optional, Type, Union
+from typing import Any, Callable, Optional, Union
 
 try:
     from pydantic import BaseModel as PydanticBaseModel
+
     PYDANTIC_AVAILABLE = True
 except ImportError:
     PydanticBaseModel = None  # type: ignore
@@ -15,6 +16,7 @@ except ImportError:
 
 class SchemaType(str, Enum):
     """Supported schema types."""
+
     PYDANTIC = "pydantic"
     JSON_SCHEMA = "json_schema"
     DICT = "dict"
@@ -22,6 +24,7 @@ class SchemaType(str, Enum):
 
 class RetryStrategy(str, Enum):
     """Retry strategies."""
+
     FIXED = "fixed"
     EXPONENTIAL = "exponential"
     LINEAR = "linear"
@@ -29,16 +32,16 @@ class RetryStrategy(str, Enum):
 
 # Type alias for schema definitions
 SchemaDefinition = Union[
-    Type["PydanticBaseModel"],  # type: ignore
-    Dict[str, Any],
-    List[Any],
+    type["PydanticBaseModel"],
+    dict[str, Any],
+    list[Any],
 ]
 
 # Type alias for LLM callable
 LLMCallable = Callable[..., str]
 
 # Type alias for validation result
-ValidationResult = Dict[str, Any]
+ValidationResult = dict[str, Any]
 
 # Type alias for parsed output
-ParsedOutput = Optional[Dict[str, Any]]
+ParsedOutput = Optional[dict[str, Any]]

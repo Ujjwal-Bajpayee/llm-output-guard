@@ -15,10 +15,10 @@ from llm_output_guard.utils.validators import (
     validate_fields,
 )
 
-
 # ---------------------------------------------------------------------------
 # parse_json_safely
 # ---------------------------------------------------------------------------
+
 
 class TestParseJsonSafely:
     def test_valid_object(self):
@@ -43,6 +43,7 @@ class TestParseJsonSafely:
 # extract_json
 # ---------------------------------------------------------------------------
 
+
 class TestExtractJson:
     def test_plain_json(self):
         assert extract_json('{"name": "Alice"}') == {"name": "Alice"}
@@ -61,7 +62,7 @@ class TestExtractJson:
         assert result["name"] == "Alice"
 
     def test_array_extraction(self):
-        raw = 'Output: [1, 2, 3]'
+        raw = "Output: [1, 2, 3]"
         assert extract_json(raw) == [1, 2, 3]
 
     def test_single_quoted_repair(self):
@@ -82,6 +83,7 @@ class TestExtractJson:
 # to_json_string
 # ---------------------------------------------------------------------------
 
+
 class TestToJsonString:
     def test_basic_dict(self):
         result = to_json_string({"a": 1})
@@ -99,6 +101,7 @@ class TestToJsonString:
 # ---------------------------------------------------------------------------
 # Field validators
 # ---------------------------------------------------------------------------
+
 
 class TestIsNonEmptyString:
     def test_valid(self):

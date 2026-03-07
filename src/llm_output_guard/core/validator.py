@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import logging
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Type
+from typing import TYPE_CHECKING, Any
 
 from .exceptions import (
     JSONParseError,
@@ -12,7 +12,9 @@ from .exceptions import (
     ValidationError,
 )
 from .schema_parser import SchemaParser
-from .types import LLMCallable, SchemaDefinition
+
+if TYPE_CHECKING:
+    from .types import LLMCallable, SchemaDefinition
 
 logger = logging.getLogger(__name__)
 
@@ -32,9 +34,9 @@ class GuardResult:
     """
 
     success: bool
-    data: Optional[Any]
+    data: Any | None
     raw_output: str
-    errors: List[Dict[str, Any]] = field(default_factory=list)
+    errors: list[dict[str, Any]] = field(default_factory=list)
     attempts: int = 1
     schema_type: str = ""
 
@@ -42,7 +44,7 @@ class GuardResult:
     # Convenience
     # ------------------------------------------------------------------
 
-    def raise_for_status(self) -> "GuardResult":
+    def raise_for_status(self) -> GuardResult:
         """Raise :exc:`ValidationError` if validation failed, else return self."""
         if not self.success:
             raise ValidationError(
@@ -100,14 +102,14 @@ class Validator:
     def __init__(
         self,
         schema: SchemaDefinition,
-        llm_callable: Optional[LLMCallable] = None,
+        llm_callable: LLMCallable | None = None,
         *,
         max_retries: int = 2,
         retry_strategy: str = "exponential",
         retry_delay: float = 1.0,
         raise_on_failure: bool = False,
         strict_json: bool = False,
-        system_prompt: Optional[str] = None,
+        system_prompt: str | None = None,
     ) -> None:
         self.schema_parser = SchemaParser(schema)
         self.llm_callable = llm_callable
@@ -159,7 +161,7 @@ class Validator:
         )
 
         attempts = 0
-        last_result: Optional[GuardResult] = None
+        last_result: GuardResult | None = None
         last_raw = ""
         current_prompt = augmented_prompt
 
@@ -173,9 +175,7 @@ class Validator:
                     logger.debug("Validation succeeded on attempt %d.", attempts)
                     return result
                 last_result = result
-                logger.debug(
-                    "Attempt %d failed validation: %s", attempts, result.error_summary
-                )
+                logger.debug("Attempt %d failed validation: %s", attempts, result.error_summary)
             except (JSONParseError, ValidationError) as exc:
                 last_result = GuardResult(
                     success=False,
@@ -227,10 +227,7 @@ class Validator:
 
         # 1. Parse JSON
         try:
-            if self.strict_json:
-                data = self._parse_json(raw)
-            else:
-                data = self._extract_json(raw)
+            data = self._parse_json(raw) if self.strict_json else self._extract_json(raw)
         except JSONParseError as exc:
             return GuardResult(
                 success=False,

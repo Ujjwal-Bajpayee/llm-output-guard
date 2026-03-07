@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import re
-from typing import Any, Dict, List, Optional, Union
+from typing import Any
 
 
 def is_non_empty_string(value: Any) -> bool:
@@ -33,9 +33,9 @@ def is_non_empty_list(value: Any) -> bool:
 
 
 def validate_fields(
-    data: Dict[str, Any],
-    rules: Dict[str, List[Any]],
-) -> List[Dict[str, Any]]:
+    data: dict[str, Any],
+    rules: dict[str, list[Any]],
+) -> list[dict[str, Any]]:
     """
     Apply a set of validator functions to specific fields of *data*.
 
@@ -51,7 +51,7 @@ def validate_fields(
 
     Returns a list of error dicts (empty on success).
     """
-    errors: List[Dict[str, Any]] = []
+    errors: list[dict[str, Any]] = []
     for field_name, validators in rules.items():
         value = data.get(field_name)
         for validator_fn in validators:
