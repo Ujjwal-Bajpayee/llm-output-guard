@@ -5,8 +5,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Tests](https://github.com/Ujjwal-Bajpayee/llm-output-guard/actions/workflows/tests.yml/badge.svg)](https://github.com/Ujjwal-Bajpayee/llm-output-guard/actions/workflows/tests.yml)
 [![Coverage](https://img.shields.io/codecov/c/github/Ujjwal-Bajpayee/llm-output-guard)](https://codecov.io/gh/Ujjwal-Bajpayee/llm-output-guard)
-[![Downloads](https://img.shields.io/pypi/dt/llm-output-guard.svg)](https://pypi.org/project/llm-output-guard/)
-
+[![Downloads](https://img.shields.io<llm-output-guard>.svg)]
 A production-ready Python package that validates LLM outputs against schemas, with automatic JSON extraction and retry logic.
 
 ---
