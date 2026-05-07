@@ -44,6 +44,7 @@ pydantic-v1 = ["pydantic>=1.10,<2.0"]
 jsonschema = ["jsonschema>=4.0"]
 openai = ["openai>=1.0"]
 langchain = ["langchain-core>=0.1"]
+ollama = ["requests>=2.28"]
 fastapi = ["fastapi>=0.100", "httpx>=0.24"]
 cli = ["click>=8.0"]
 all = [
@@ -51,6 +52,7 @@ all = [
   "jsonschema>=4.0",
   "openai>=1.0",
   "langchain-core>=0.1",
+  "requests>=2.28",
   "fastapi>=0.100",
   "httpx>=0.24",
   "click>=8.0",

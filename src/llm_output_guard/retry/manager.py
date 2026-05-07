@@ -1,11 +1,8 @@
 """Retry manager."""
 
 from __future__ import annotations
-
 import logging
-
 from .strategies import BaseRetryStrategy, get_strategy
-
 logger = logging.getLogger(__name__)
 
 

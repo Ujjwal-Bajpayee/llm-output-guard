@@ -14,6 +14,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.2.0] — 2026-05-07
+
+### Added
+- Ollama integration (`GuardedOllama`) for local model support via Ollama API.
+- Environment variable configuration for Ollama (`OLLAMA_BASE_URL`, `OLLAMA_MODEL`).
+- Comprehensive tests for Ollama integration with error handling.
+
+---
+
 ## [0.1.0] — 2024-03-07
 
 ### Added
@@ -30,7 +39,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Comprehensive test suite (unit + integration).
 - Zero hard dependencies for the core package; all integrations are optional extras.
 
-[Unreleased]: https://github.com/Ujjwal-Bajpayee/llm-output-guard/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/Ujjwal-Bajpayee/llm-output-guard/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/Ujjwal-Bajpayee/llm-output-guard/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/Ujjwal-Bajpayee/llm-output-guard/releases/tag/v0.1.0
 
 

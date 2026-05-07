@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import json
-
 import pytest
 
 try:
@@ -87,9 +86,7 @@ class TestSchemaCommand:
     def test_prints_pydantic_schema(self, runner):
         from llm_output_guard.cli.main import _cli
 
-        # Use a model from our test fixtures
         result = runner.invoke(_cli, ["schema", "tests.fixtures.schemas.PERSON_JSON_SCHEMA"])
-        # This will fail (it's not a class) — test the error path
         assert result.exit_code == 1
 
     def test_invalid_model_path_no_dot(self, runner):
@@ -110,4 +107,4 @@ class TestSchemaCommand:
 
         result = runner.invoke(_cli, ["--version"])
         assert result.exit_code == 0
-        assert "0.1.0" in result.output
+        assert "0.2.0" in result.output

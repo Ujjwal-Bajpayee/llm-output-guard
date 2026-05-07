@@ -13,7 +13,6 @@ def is_non_empty_string(value: Any) -> bool:
 def is_positive_number(value: Any) -> bool:
     return isinstance(value, (int, float)) and value > 0
 
-
 def is_valid_email(value: Any) -> bool:
     if not isinstance(value, str):
         return False
