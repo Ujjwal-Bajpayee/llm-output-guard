@@ -11,6 +11,7 @@ class BaseRetryStrategy:
 
     def get_delay(self, attempt: int) -> float:
         raise NotImplementedError
+
     def sleep(self, attempt: int) -> None:
         time.sleep(self.get_delay(attempt))
 
@@ -20,6 +21,7 @@ class FixedRetryStrategy(BaseRetryStrategy):
 
     def __init__(self, delay: float = 1.0) -> None:
         self.delay = delay
+
     def get_delay(self, attempt: int) -> float:
         return self.delay
 

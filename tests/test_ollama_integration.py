@@ -50,9 +50,12 @@ class TestOllamaIntegration:
         if not REQUESTS_AVAILABLE:
             pytest.skip("requests not installed")
 
-        with patch.dict(
-            "os.environ", {"OLLAMA_BASE_URL": "http://custom:8080", "OLLAMA_MODEL": "mistral"}
-        ), patch("requests.post"):
+        with (
+            patch.dict(
+                "os.environ", {"OLLAMA_BASE_URL": "http://custom:8080", "OLLAMA_MODEL": "mistral"}
+            ),
+            patch("requests.post"),
+        ):
             guard = GuardedOllama(schema={"type": "object"})
             assert guard.base_url == "http://custom:8080"
 
@@ -63,8 +66,9 @@ class TestOllamaIntegration:
         if not REQUESTS_AVAILABLE:
             pytest.skip("requests not installed")
 
-        with patch.dict("os.environ", {"OLLAMA_MODEL": "mistral"}, clear=True), patch(
-            "requests.post"
+        with (
+            patch.dict("os.environ", {"OLLAMA_MODEL": "mistral"}, clear=True),
+            patch("requests.post"),
         ):
             guard = GuardedOllama(schema={"type": "object"})
             assert guard.base_url == "http://localhost:11434"
@@ -102,9 +106,10 @@ class TestOllamaIntegration:
 
         schema = {"type": "object", "properties": {"name": {"type": "string"}}}
 
-        with patch(
-            "requests.post", side_effect=__import__("requests").exceptions.ConnectionError()
-        ), pytest.raises(IntegrationError, match="Failed to connect"):
+        with (
+            patch("requests.post", side_effect=__import__("requests").exceptions.ConnectionError()),
+            pytest.raises(IntegrationError, match="Failed to connect"),
+        ):
             guard = GuardedOllama(
                 schema=schema, model="mistral", raise_on_failure=True, max_retries=0
             )
@@ -119,9 +124,10 @@ class TestOllamaIntegration:
 
         schema = {"type": "object", "properties": {"name": {"type": "string"}}}
 
-        with patch(
-            "requests.post", side_effect=__import__("requests").exceptions.Timeout()
-        ), pytest.raises(IntegrationError, match="timed out"):
+        with (
+            patch("requests.post", side_effect=__import__("requests").exceptions.Timeout()),
+            pytest.raises(IntegrationError, match="timed out"),
+        ):
             guard = GuardedOllama(
                 schema=schema, model="mistral", raise_on_failure=True, max_retries=0
             )
@@ -143,9 +149,10 @@ class TestOllamaIntegration:
             response=mock_response
         )
 
-        with patch(
-            "requests.post", return_value=mock_response
-        ), pytest.raises(IntegrationError, match="API error"):
+        with (
+            patch("requests.post", return_value=mock_response),
+            pytest.raises(IntegrationError, match="API error"),
+        ):
             guard = GuardedOllama(
                 schema=schema, model="mistral", raise_on_failure=True, max_retries=0
             )
@@ -163,9 +170,10 @@ class TestOllamaIntegration:
         mock_response = MagicMock()
         mock_response.json.return_value = {"error": "something went wrong"}
 
-        with patch(
-            "requests.post", return_value=mock_response
-        ), pytest.raises(IntegrationError, match="Unexpected Ollama response"):
+        with (
+            patch("requests.post", return_value=mock_response),
+            pytest.raises(IntegrationError, match="Unexpected Ollama response"),
+        ):
             guard = GuardedOllama(
                 schema=schema, model="mistral", raise_on_failure=True, max_retries=0
             )
@@ -202,9 +210,7 @@ class TestOllamaIntegration:
         mock_response = MagicMock()
         mock_response.json.return_value = {"response": '{"name": "Alice"}'}
 
-        with patch("requests.post", return_value=mock_response) as mock_post, patch(
-            "time.sleep"
-        ):
+        with patch("requests.post", return_value=mock_response) as mock_post, patch("time.sleep"):
             guard = GuardedOllama(
                 schema=schema,
                 model="mistral",
