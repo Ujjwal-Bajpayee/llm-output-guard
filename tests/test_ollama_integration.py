@@ -39,10 +39,9 @@ class TestOllamaIntegration:
         if not REQUESTS_AVAILABLE:
             pytest.skip("requests not installed")
 
-        with patch.dict("os.environ", {"OLLAMA_MODEL": "llama2"}):
-            with patch("requests.post"):
-                guard = GuardedOllama(schema={"type": "object"})
-                assert guard.model == "llama2"
+        with patch.dict("os.environ", {"OLLAMA_MODEL": "llama2"}), patch("requests.post"):
+            guard = GuardedOllama(schema={"type": "object"})
+            assert guard.model == "llama2"
 
     def test_base_url_from_env_variable(self):
         """GuardedOllama uses OLLAMA_BASE_URL environment variable if provided."""
@@ -53,10 +52,9 @@ class TestOllamaIntegration:
 
         with patch.dict(
             "os.environ", {"OLLAMA_BASE_URL": "http://custom:8080", "OLLAMA_MODEL": "mistral"}
-        ):
-            with patch("requests.post"):
-                guard = GuardedOllama(schema={"type": "object"})
-                assert guard.base_url == "http://custom:8080"
+        ), patch("requests.post"):
+            guard = GuardedOllama(schema={"type": "object"})
+            assert guard.base_url == "http://custom:8080"
 
     def test_default_base_url(self):
         """GuardedOllama uses default base URL when not provided."""
@@ -65,10 +63,11 @@ class TestOllamaIntegration:
         if not REQUESTS_AVAILABLE:
             pytest.skip("requests not installed")
 
-        with patch.dict("os.environ", {"OLLAMA_MODEL": "mistral"}, clear=True):
-            with patch("requests.post"):
-                guard = GuardedOllama(schema={"type": "object"})
-                assert guard.base_url == "http://localhost:11434"
+        with patch.dict("os.environ", {"OLLAMA_MODEL": "mistral"}, clear=True), patch(
+            "requests.post"
+        ):
+            guard = GuardedOllama(schema={"type": "object"})
+            assert guard.base_url == "http://localhost:11434"
 
     def test_guarded_ollama_successful_call(self):
         """GuardedOllama.guard makes successful API call and validates output."""
@@ -86,10 +85,9 @@ class TestOllamaIntegration:
         mock_response = MagicMock()
         mock_response.json.return_value = {"response": '{"name": "Alice", "age": 30}'}
 
-        with patch("requests.post", return_value=mock_response):
-            with patch("time.sleep"):
-                guard = GuardedOllama(schema=schema, model="mistral", max_retries=0)
-                result = guard.guard("Extract user info")
+        with patch("requests.post", return_value=mock_response), patch("time.sleep"):
+            guard = GuardedOllama(schema=schema, model="mistral", max_retries=0)
+            result = guard.guard("Extract user info")
 
         assert result.success is True
         assert result.data["name"] == "Alice"
@@ -104,12 +102,13 @@ class TestOllamaIntegration:
 
         schema = {"type": "object", "properties": {"name": {"type": "string"}}}
 
-        with patch("requests.post", side_effect=__import__("requests").exceptions.ConnectionError()):
+        with patch(
+            "requests.post", side_effect=__import__("requests").exceptions.ConnectionError()
+        ), pytest.raises(IntegrationError, match="Failed to connect"):
             guard = GuardedOllama(
                 schema=schema, model="mistral", raise_on_failure=True, max_retries=0
             )
-            with pytest.raises(IntegrationError, match="Failed to connect"):
-                guard.guard("test")
+            guard.guard("test")
 
     def test_guarded_ollama_timeout_error(self):
         """GuardedOllama raises IntegrationError on timeout."""
@@ -120,12 +119,13 @@ class TestOllamaIntegration:
 
         schema = {"type": "object", "properties": {"name": {"type": "string"}}}
 
-        with patch("requests.post", side_effect=__import__("requests").exceptions.Timeout()):
+        with patch(
+            "requests.post", side_effect=__import__("requests").exceptions.Timeout()
+        ), pytest.raises(IntegrationError, match="timed out"):
             guard = GuardedOllama(
                 schema=schema, model="mistral", raise_on_failure=True, max_retries=0
             )
-            with pytest.raises(IntegrationError, match="timed out"):
-                guard.guard("test")
+            guard.guard("test")
 
     def test_guarded_ollama_http_error(self):
         """GuardedOllama raises IntegrationError on HTTP error."""
@@ -143,12 +143,13 @@ class TestOllamaIntegration:
             response=mock_response
         )
 
-        with patch("requests.post", return_value=mock_response):
+        with patch(
+            "requests.post", return_value=mock_response
+        ), pytest.raises(IntegrationError, match="API error"):
             guard = GuardedOllama(
                 schema=schema, model="mistral", raise_on_failure=True, max_retries=0
             )
-            with pytest.raises(IntegrationError, match="API error"):
-                guard.guard("test")
+            guard.guard("test")
 
     def test_guarded_ollama_unexpected_response_format(self):
         """GuardedOllama raises IntegrationError on unexpected response format."""
@@ -162,12 +163,13 @@ class TestOllamaIntegration:
         mock_response = MagicMock()
         mock_response.json.return_value = {"error": "something went wrong"}
 
-        with patch("requests.post", return_value=mock_response):
+        with patch(
+            "requests.post", return_value=mock_response
+        ), pytest.raises(IntegrationError, match="Unexpected Ollama response"):
             guard = GuardedOllama(
                 schema=schema, model="mistral", raise_on_failure=True, max_retries=0
             )
-            with pytest.raises(IntegrationError, match="Unexpected Ollama response"):
-                guard.guard("test")
+            guard.guard("test")
 
     def test_validate_output_without_api_call(self):
         """validate_output works without making an API call."""
@@ -200,18 +202,19 @@ class TestOllamaIntegration:
         mock_response = MagicMock()
         mock_response.json.return_value = {"response": '{"name": "Alice"}'}
 
-        with patch("requests.post", return_value=mock_response) as mock_post:
-            with patch("time.sleep"):
-                guard = GuardedOllama(
-                    schema=schema,
-                    model="mistral",
-                    temperature=0.7,
-                    max_tokens=100,
-                    max_retries=0,
-                )
-                guard.guard("test")
+        with patch("requests.post", return_value=mock_response) as mock_post, patch(
+            "time.sleep"
+        ):
+            guard = GuardedOllama(
+                schema=schema,
+                model="mistral",
+                temperature=0.7,
+                max_tokens=100,
+                max_retries=0,
+            )
+            guard.guard("test")
 
-            # Verify the API was called with correct parameters
-            call_kwargs = mock_post.call_args[1]
-            assert call_kwargs["json"]["temperature"] == 0.7
-            assert call_kwargs["json"]["num_predict"] == 100
+        # Verify the API was called with correct parameters
+        call_kwargs = mock_post.call_args[1]
+        assert call_kwargs["json"]["temperature"] == 0.7
+        assert call_kwargs["json"]["num_predict"] == 100

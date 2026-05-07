@@ -12,7 +12,7 @@ if TYPE_CHECKING:
     from ..core.types import SchemaDefinition
 
 try:
-    import requests  # type: ignore[import-untyped]
+    import requests  # type: ignore
 
     REQUESTS_AVAILABLE = True
 except ImportError:
