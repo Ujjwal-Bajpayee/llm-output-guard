@@ -17,7 +17,7 @@ A production-ready Python package that validates LLM outputs against schemas, wi
 - **Automatic JSON extraction** — strips markdown fences and prose wrappers from LLM responses
 - **Configurable retry** — fixed, exponential, or linear back-off with jitter
 - **Zero hard dependencies** — the core works with nothing installed; extras add integrations
-- **Integrations** — LangChain, FastAPI, OpenAI SDK
+- **Integrations** — OpenAI SDK, LangChain, FastAPI, and local models via Ollama
 - **CLI** — validate JSON files against schemas from the terminal
 - **Fully typed** — `py.typed` marker, complete `mypy --strict` coverage
 
@@ -193,6 +193,9 @@ pip install "llm-output-guard[openai]"
 # With LangChain integration
 pip install "llm-output-guard[langchain]"
 
+# With Ollama integration (local models)
+pip install "llm-output-guard[ollama]"
+
 # Everything
 pip install "llm-output-guard[all]"
 ```
@@ -284,6 +287,37 @@ from llm_output_guard.integrations.langchain import GuardedLLM
 guarded = GuardedLLM(llm=ChatOpenAI(), schema=Person, max_retries=3)
 result = guarded.invoke("Tell me about Alice.")
 ```
+
+### Ollama (Local Models)
+
+```python
+from llm_output_guard.integrations.ollama import GuardedOllama
+
+# Basic usage
+guard = GuardedOllama(schema=Person, model="mistral", max_retries=3)
+result = guard.guard("Tell me about Alice.")
+
+# With custom configuration
+guard = GuardedOllama(
+    schema=Person,
+    model="mistral",
+    base_url="http://localhost:11434",  # default
+    temperature=0.7,
+    max_tokens=500,
+)
+result = guard.guard("Tell me about Alice.")
+```
+
+**Environment variable configuration:**
+
+```bash
+export OLLAMA_BASE_URL=http://localhost:11434  # Optional, defaults to localhost:11434
+export OLLAMA_MODEL=mistral                     # Optional, must override in code if not set
+```
+
+**Requirements:**
+- [Ollama](https://ollama.ai/) must be running locally
+- A model must be available (e.g., `ollama pull mistral`)
 
 ### FastAPI
 
