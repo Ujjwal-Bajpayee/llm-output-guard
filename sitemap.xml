@@ -2,30 +2,30 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://Ujjwal-Bajpayee.github.io/llm-output-guard/</loc>
-         <lastmod>2026-03-10</lastmod>
+         <lastmod>2026-05-07</lastmod>
     </url>
     <url>
          <loc>https://Ujjwal-Bajpayee.github.io/llm-output-guard/api-reference/</loc>
-         <lastmod>2026-03-10</lastmod>
+         <lastmod>2026-05-07</lastmod>
     </url>
     <url>
          <loc>https://Ujjwal-Bajpayee.github.io/llm-output-guard/getting-started/</loc>
-         <lastmod>2026-03-10</lastmod>
+         <lastmod>2026-05-07</lastmod>
     </url>
     <url>
          <loc>https://Ujjwal-Bajpayee.github.io/llm-output-guard/examples/basic_usage/</loc>
-         <lastmod>2026-03-10</lastmod>
+         <lastmod>2026-05-07</lastmod>
     </url>
     <url>
          <loc>https://Ujjwal-Bajpayee.github.io/llm-output-guard/examples/fastapi_integration/</loc>
-         <lastmod>2026-03-10</lastmod>
+         <lastmod>2026-05-07</lastmod>
     </url>
     <url>
          <loc>https://Ujjwal-Bajpayee.github.io/llm-output-guard/examples/langchain_integration/</loc>
-         <lastmod>2026-03-10</lastmod>
+         <lastmod>2026-05-07</lastmod>
     </url>
     <url>
          <loc>https://Ujjwal-Bajpayee.github.io/llm-output-guard/examples/pydantic_integration/</loc>
-         <lastmod>2026-03-10</lastmod>
+         <lastmod>2026-05-07</lastmod>
     </url>
 </urlset>
